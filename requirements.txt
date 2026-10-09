@@ -1,7 +1,6 @@
-
 streamlit
 scikit-fuzzy
+networkx
 numpy
 pandas
-matplotlib
 requests
