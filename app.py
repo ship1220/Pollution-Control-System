@@ -19,22 +19,185 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-.block-container { padding-top: 1.4rem; padding-bottom: 2.5rem; max-width: 1120px; }
-[data-testid="stHeader"] { background: rgba(247,249,252,.92); }
-.hero { padding: 28px 30px; border-radius: 18px; background: linear-gradient(120deg,#102f46,#176b68); color: white; margin-bottom: 22px; }
-.hero h1 { color: white; margin: 0 0 6px 0; letter-spacing: .04em; font-size: 2.15rem; }
-.hero p { color: #e0f2f5; margin: 3px 0 0 0; }
-div[data-testid="stMetric"] { background: #fff; border: 1px solid #dfe7ef; padding: 17px 18px; border-radius: 14px; box-shadow: 0 2px 8px rgba(16,47,70,.04); }
-div[data-testid="stMetricLabel"] { color: #526477; }
-div[data-testid="stMetricValue"] { color: #17354d; }
-div.stButton > button[kind="primary"] { background: #1769aa; border: 1px solid #1769aa; color: white; border-radius: 10px; min-height: 2.8rem; font-weight: 650; }
-div.stButton > button[kind="primary"]:hover { background: #10558c; border-color: #10558c; color: white; }
-.result-panel { padding: 18px 20px; border-radius: 14px; border: 1px solid #dfe7ef; background: #fff; min-height: 125px; }
-.result-eyebrow { color: #5a6c7f; font-size: .82rem; text-transform: uppercase; letter-spacing: .06em; margin-bottom: 7px; }
-.result-heading { color: #17354d; font-size: 1.25rem; font-weight: 700; margin-bottom: 7px; }
-.result-copy { color: #526477; font-size: .94rem; line-height: 1.5; }
-.section-intro { color: #607286; margin-top: -.4rem; margin-bottom: 1rem; }
-hr { border-color: #e1e8ef; }
+    :root {
+        --ag-accent: #167d8d;
+        --ag-accent-hover: #116775;
+        --ag-ink: #172b3a;
+        --ag-muted: #5c6d7e;
+        --ag-border: #d9e3eb;
+        --ag-card-light: #ffffff;
+        --ag-card-dark: #202a35;
+    }
+
+    .block-container {
+        padding-top: 1.5rem;
+        padding-bottom: 2.5rem;
+        max-width: 1160px;
+    }
+
+    [data-testid="stHeader"] {
+        background: transparent;
+    }
+
+    .hero {
+        padding: 27px 30px;
+        border-radius: 18px;
+        background: linear-gradient(120deg, #12354d 0%, #176b68 100%);
+        color: #ffffff;
+        margin-bottom: 22px;
+        border: 1px solid rgba(255,255,255,0.10);
+        box-shadow: 0 8px 24px rgba(10, 35, 50, 0.12);
+    }
+    .hero h1 {
+        color: #ffffff !important;
+        margin: 0 0 6px 0;
+        letter-spacing: .035em;
+        font-size: 2.1rem;
+    }
+    .hero p {
+        color: #e3f2f4 !important;
+        margin: 3px 0 0 0;
+    }
+
+    /* Streamlit metric cards: explicit contrast in light and dark mode. */
+    [data-testid="stMetric"] {
+        background: var(--ag-card-light);
+        border: 1px solid var(--ag-border);
+        border-radius: 14px;
+        padding: 17px 18px;
+        box-shadow: 0 3px 10px rgba(18, 53, 77, 0.045);
+    }
+    [data-testid="stMetricLabel"],
+    [data-testid="stMetricLabel"] p {
+        color: var(--ag-muted) !important;
+        opacity: 1 !important;
+        font-weight: 600 !important;
+    }
+    [data-testid="stMetricValue"],
+    [data-testid="stMetricValue"] div {
+        color: var(--ag-ink) !important;
+        opacity: 1 !important;
+    }
+    [data-testid="stMetricDelta"] {
+        color: var(--ag-muted) !important;
+    }
+
+    /* Neutral teal accent for the slider, not emergency red. */
+    [data-testid="stSlider"] [data-baseweb="slider"] [role="slider"] {
+        background: var(--ag-accent) !important;
+        border-color: var(--ag-accent) !important;
+    }
+    [data-testid="stSlider"] [data-baseweb="slider"] > div > div {
+        background: var(--ag-accent) !important;
+    }
+
+    div.stButton > button[kind="primary"] {
+        background: #1769aa;
+        border: 1px solid #1769aa;
+        color: #ffffff;
+        border-radius: 10px;
+        min-height: 2.8rem;
+        font-weight: 650;
+        transition: background .15s ease, border-color .15s ease;
+    }
+    div.stButton > button[kind="primary"]:hover {
+        background: #10558c;
+        border-color: #10558c;
+        color: #ffffff;
+    }
+
+    .result-panel {
+        padding: 19px 20px;
+        border-radius: 14px;
+        border: 1px solid var(--ag-border);
+        background: var(--ag-card-light);
+        min-height: 128px;
+    }
+    .result-eyebrow {
+        color: var(--ag-muted) !important;
+        font-size: .78rem;
+        text-transform: uppercase;
+        letter-spacing: .07em;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .result-heading {
+        color: var(--ag-ink) !important;
+        font-size: 1.22rem;
+        font-weight: 750;
+        margin-bottom: 7px;
+    }
+    .result-copy {
+        color: var(--ag-muted) !important;
+        font-size: .94rem;
+        line-height: 1.55;
+    }
+    .section-intro {
+        color: var(--ag-muted);
+        margin-top: -.4rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Replace harsh alert colors with calm, readable status treatments. */
+    .status-panel {
+        border-radius: 12px;
+        padding: 15px 18px;
+        margin-top: 18px;
+        border: 1px solid #c9dce7;
+        background: #edf5f8;
+        color: #1d455b;
+        line-height: 1.55;
+    }
+    .status-panel strong { color: #173b50; }
+    .status-panel.low {
+        background: #edf7f2;
+        border-color: #c9e6d7;
+        color: #245b43;
+    }
+    .status-panel.medium {
+        background: #edf5f8;
+        border-color: #c9dce7;
+        color: #1d455b;
+    }
+    .status-panel.high {
+        background: #fff5e8;
+        border-color: #f0d7b2;
+        color: #744a16;
+    }
+    .status-panel.critical {
+        background: #fbeceb;
+        border-color: #edc4c1;
+        color: #8a2925;
+    }
+    .status-panel.low strong { color: #245b43; }
+    .status-panel.medium strong { color: #1d455b; }
+    .status-panel.high strong { color: #744a16; }
+    .status-panel.critical strong { color: #8a2925; }
+
+    hr { border-color: var(--ag-border); }
+
+    /* Dark theme overrides so cards retain strong text contrast. */
+    @media (prefers-color-scheme: dark) {
+        [data-testid="stMetric"], .result-panel {
+            background: #202a35;
+            border-color: #3b4a58;
+        }
+        [data-testid="stMetricLabel"],
+        [data-testid="stMetricLabel"] p,
+        .result-eyebrow, .result-copy {
+            color: #c4d0da !important;
+        }
+        [data-testid="stMetricValue"],
+        [data-testid="stMetricValue"] div,
+        .result-heading {
+            color: #f3f7fa !important;
+        }
+        .status-panel.low { background: #19372c; border-color: #315b48; color: #d1eadb; }
+        .status-panel.medium { background: #1c3544; border-color: #35576b; color: #d4e8f1; }
+        .status-panel.high { background: #45351f; border-color: #6b512e; color: #f4dfbd; }
+        .status-panel.critical { background: #452725; border-color: #713a37; color: #f6d5d2; }
+        .status-panel strong { color: inherit !important; }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -436,13 +599,22 @@ m3.metric('Recommended control intensity', str(round(result['output'])) + '%')
 action_title, action_text = describe_action(result["output"])
 
 if result["output"] < 25:
-    st.success(f"**{action_title}** — {action_text}")
+    status_class = "low"
 elif result["output"] < 50:
-    st.info(f"**{action_title}** — {action_text}")
+    status_class = "medium"
 elif result["output"] < 75:
-    st.warning(f"**{action_title}** — {action_text}")
+    status_class = "high"
 else:
-    st.error(f"**{action_title}** — {action_text}")
+    status_class = "critical"
+
+st.markdown(
+    f"""
+    <div class="status-panel {status_class}">
+        <strong>{action_title}</strong> — {action_text}
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 st.caption(
     "Control intensity is a simulated recommendation, not a validated "
