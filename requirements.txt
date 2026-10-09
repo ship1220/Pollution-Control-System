@@ -1,7 +1,9 @@
 
 streamlit
-scikit-fuzzy
-numpy
+scikit-fuzzy==0.5.0
+numpy==1.26.4
+scipy==1.15.3
 pandas
 matplotlib
 requests
+
