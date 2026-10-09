@@ -1,6 +1,6 @@
-
 streamlit
 scikit-fuzzy==0.5.0
+networkx
 numpy
 scipy
 pandas
