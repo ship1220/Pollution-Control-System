@@ -564,7 +564,7 @@ if analyze:
 # Keep results visible when a widget changes or the page reruns.
 if "assessment" not in st.session_state:
     st.info(
-        "Enter a location and emission level in the sidebar, then click "
+        "Enter a location and emission level, then click "
         "**Analyze & Recommend** to run the fuzzy system."
     )
 
