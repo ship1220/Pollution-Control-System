@@ -329,10 +329,10 @@ def build_fuzzy_system():
         # maximum plant-control intensity when plant emissions are low.
         ["low",       "low",       "moderate"],   # Good AQI
         ["low",       "moderate",  "high"],       # Moderate AQI
-        ["low",       "moderate",  "high"],       # Sensitive groups
-        ["low",       "high",      "very_high"],  # Unhealthy
-        ["low",       "high",      "very_high"],  # Very unhealthy
-        ["low",       "very_high", "very_high"],  # Hazardous
+        ["moderate",       "high",  "high"],       # Sensitive groups
+        ["high",       "high",      "very_high"],  # Unhealthy
+        ["high",       "very_high",      "very_high"],  # Very unhealthy
+        ["very_high",       "very_high", "very_high"],  # Hazardous
     ]
 
     rules = []
