@@ -126,3 +126,4 @@ with st.expander("About this recommendation"):
 
 st.caption(
     "AIRGUARD · Academic fuzzy-logic prototype · "
+)
