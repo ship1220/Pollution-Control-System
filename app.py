@@ -328,12 +328,15 @@ def build_fuzzy_system():
 
     # Rows = AQI terms; columns = emission terms.
     rule_matrix = [
-        ["low",       "moderate",  "high"],
-        ["moderate",  "high",      "very_high"],
-        ["high",      "high",      "very_high"],
-        ["high",      "very_high", "very_high"],
-        ["very_high", "very_high", "very_high"],
-        ["very_high", "very_high", "very_high"],
+        # Columns: low, medium, high industrial emissions.
+        # Ambient AQI is contextual; it must not independently trigger
+        # maximum plant-control intensity when plant emissions are low.
+        ["low",       "low",       "moderate"],   # Good AQI
+        ["low",       "moderate",  "high"],       # Moderate AQI
+        ["low",       "moderate",  "high"],       # Sensitive groups
+        ["low",       "high",      "very_high"],  # Unhealthy
+        ["low",       "high",      "very_high"],  # Very unhealthy
+        ["low",       "very_high", "very_high"],  # Hazardous
     ]
 
     rules = []
@@ -486,14 +489,14 @@ emission_value = st.sidebar.slider(
 )
 
 st.sidebar.caption(
-    "Ambient AQI is fetched for the location. Set the plant emission "
+    "Ambient AQI is contextual information. Set the plant emission "
     "level separately using the slider."
 )
 
 analyze = st.sidebar.button(
     "Analyze & Recommend",
     type="primary",
-    use_container_width=True,
+    width="stretch",
 )
 
 st.sidebar.divider()
@@ -620,6 +623,18 @@ st.caption(
     "Control intensity is a simulated recommendation, not a validated "
     "physical actuator setting."
 )
+if result["aqi"] >= 151:
+    st.warning(
+        "Ambient air quality is very unhealthy or worse. Investigate local "
+        "air-quality conditions separately; ambient AQI alone does not prove "
+        "that this plant caused the pollution."
+    )
+elif result["aqi"] >= 101:
+    st.info(
+        "Ambient air quality is unhealthy for sensitive groups or worse. "
+        "Treat this as a contextual alert, not a direct measurement of this "
+        "plant's emissions."
+    )
 
 # ============================================================
 # POLLUTANT DATA
@@ -647,7 +662,7 @@ with st.expander("View ambient pollutant readings"):
         st.dataframe(
             pd.DataFrame(pollutant_rows),
             hide_index=True,
-            use_container_width=True,
+            width="stretch",
         )
     else:
         st.write("No additional pollutant readings were returned.")
